@@ -18,6 +18,8 @@
 		5E81CABA1DB1A31800CD252C /* MovieApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E81CAB91DB1A31800CD252C /* MovieApiService.swift */; };
 		5E81CABD1DB1A4C800CD252C /* MovieEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E81CABC1DB1A4C800CD252C /* MovieEnum.swift */; };
 		5E81CAC11DB1A66F00CD252C /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E81CAC01DB1A66F00CD252C /* Movie.swift */; };
+		5EBC8EB81DB1E28600C2E664 /* MovieDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EBC8EB71DB1E28600C2E664 /* MovieDetailViewController.swift */; };
+		5EBC8EBA1DB1E29A00C2E664 /* MovieListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EBC8EB91DB1E29A00C2E664 /* MovieListViewController.swift */; };
 		AAD6C66B1970789CBCDC0E46 /* Pods_Week1_Flicks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90D11C5946E348F94BBE8370 /* Pods_Week1_Flicks.framework */; };
 		C335BCA15886BA25A41F9815 /* Pods_Week1_FlicksTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59B75D631CFBA3F8FDFC2342 /* Pods_Week1_FlicksTests.framework */; };
 /* End PBXBuildFile section */
@@ -59,6 +61,8 @@
 		5E81CAB91DB1A31800CD252C /* MovieApiService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieApiService.swift; sourceTree = "<group>"; };
 		5E81CABC1DB1A4C800CD252C /* MovieEnum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieEnum.swift; sourceTree = "<group>"; };
 		5E81CAC01DB1A66F00CD252C /* Movie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
+		5EBC8EB71DB1E28600C2E664 /* MovieDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieDetailViewController.swift; sourceTree = "<group>"; };
+		5EBC8EB91DB1E29A00C2E664 /* MovieListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieListViewController.swift; sourceTree = "<group>"; };
 		70F196D6D8A32CB0ABAE8DE8 /* Pods-Week1_FlicksTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Week1_FlicksTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Week1_FlicksTests/Pods-Week1_FlicksTests.release.xcconfig"; sourceTree = "<group>"; };
 		8D6995BD089B3BDE6BCA8606 /* Pods-Week1_Flicks.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Week1_Flicks.release.xcconfig"; path = "Pods/Target Support Files/Pods-Week1_Flicks/Pods-Week1_Flicks.release.xcconfig"; sourceTree = "<group>"; };
 		90D11C5946E348F94BBE8370 /* Pods_Week1_Flicks.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Week1_Flicks.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -121,6 +125,7 @@
 			isa = PBXGroup;
 			children = (
 				5E81CA8B1DB18E8C00CD252C /* AppDelegate.swift */,
+				5EBC8EBB1DB1E60300C2E664 /* Controllers */,
 				5E81CA8D1DB18E8C00CD252C /* ViewController.swift */,
 				5E81CA8F1DB18E8C00CD252C /* Main.storyboard */,
 				5E81CA921DB18E8C00CD252C /* Assets.xcassets */,
@@ -173,6 +178,15 @@
 				5E81CABC1DB1A4C800CD252C /* MovieEnum.swift */,
 			);
 			name = Enums;
+			sourceTree = "<group>";
+		};
+		5EBC8EBB1DB1E60300C2E664 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				5EBC8EB71DB1E28600C2E664 /* MovieDetailViewController.swift */,
+				5EBC8EB91DB1E29A00C2E664 /* MovieListViewController.swift */,
+			);
+			name = Controllers;
 			sourceTree = "<group>";
 		};
 		601C961F3E7129BF3EA34B30 /* Frameworks */ = {
@@ -469,6 +483,8 @@
 				5E81CA8E1DB18E8C00CD252C /* ViewController.swift in Sources */,
 				5E81CABA1DB1A31800CD252C /* MovieApiService.swift in Sources */,
 				5E81CA8C1DB18E8C00CD252C /* AppDelegate.swift in Sources */,
+				5EBC8EB81DB1E28600C2E664 /* MovieDetailViewController.swift in Sources */,
+				5EBC8EBA1DB1E29A00C2E664 /* MovieListViewController.swift in Sources */,
 				5E81CABD1DB1A4C800CD252C /* MovieEnum.swift in Sources */,
 				5E81CAC11DB1A66F00CD252C /* Movie.swift in Sources */,
 			);
@@ -543,6 +559,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -592,6 +609,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -620,6 +638,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F8558645ABBD81817239D6F2 /* Pods-Week1_Flicks.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = U989RZC3BD;
 				INFOPLIST_FILE = Week1_Flicks/Info.plist;
@@ -634,6 +653,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8D6995BD089B3BDE6BCA8606 /* Pods-Week1_Flicks.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = U989RZC3BD;
 				INFOPLIST_FILE = Week1_Flicks/Info.plist;
