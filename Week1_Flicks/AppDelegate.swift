@@ -17,27 +17,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
         
-        // Set up the first View Controller
-        //let vc1 = UIViewController()
+        // Get the storyboard
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+        
+        // fetch two instances of the MainNavigation Nav Controller
         if let nav1 = storyBoard.instantiateViewController(withIdentifier: "MainNavigation") as? UINavigationController,
             let nav2 = storyBoard.instantiateViewController(withIdentifier: "MainNavigation") as? UINavigationController{
-            //vc1.view.backgroundColor = UIColor.orangeColor()
-            nav1.tabBarItem.title = "Now Playing"
-            nav1.tabBarItem.image = UIImage(named: "now_playing")
             
+            
+            // Assign the NowPlaying enum to the first view controller
             if let vc1 = nav1.viewControllers[0] as? MovieListViewController{
                 vc1.movieEnum = MovieEnum.nowPlaying
             }
             
-            
+            // Assign the TopRated enum to the second view controller
             if let vc2 = nav2.viewControllers[0] as? MovieListViewController{
                 vc2.movieEnum = MovieEnum.topRated
             }
-            
-            // Set up the second View Controller
-            //let vc2 = UIViewController()
-            //vc2.view.backgroundColor = UIColor.purpleColor()
+            // assign names and icons
+            nav1.tabBarItem.title = "Now Playing"
+            nav1.tabBarItem.image = UIImage(named: "now_playing")
             nav2.tabBarItem.title = "Top Rated"
             nav2.tabBarItem.image = UIImage(named: "top_rated")
             

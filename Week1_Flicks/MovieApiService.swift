@@ -43,8 +43,10 @@ class MovieApiService{
     
     
     // Load list of moives by either NowPlaying or To Rated
-    func loadMovies(page:Int = 1, byMovieEnum: MovieEnum){
-        
+    func loadMovies(page:Int = 1, byMovieEnum: MovieEnum, shouldResetMovieList: Bool = false, completion: @escaping () -> Void){
+        if shouldResetMovieList {
+            self.movies = []
+        }
         // Get Url by considering movie type
         let urlString:String = (byMovieEnum == MovieEnum.nowPlaying) ? getNowPlayingUrl(page: page) : getTopRatedUrl(page: page)
         
@@ -76,6 +78,7 @@ class MovieApiService{
                         }
                     }
                 }
+                completion()
                 
                 
 //                let results = jsonData["results"]
