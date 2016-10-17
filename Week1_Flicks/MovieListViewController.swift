@@ -9,13 +9,18 @@
 import UIKit
 import AFNetworking
 
-class MovieListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
+import NVActivityIndicatorView
+
+class MovieListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, NVActivityIndicatorViewable {
 
     var movieEnum: MovieEnum?
     var movies: [Movie] = []
     var currentPage: Int = 1
     var totalPages: Int = 1
-    var isMoreDataLoading: Bool = false // for infinite scroll
+    
+    // for infinite scroll
+    var isMoreDataLoading: Bool = false // lock access to api service to one call at a time
+    var loadingView: NVActivityIndicatorView? = nil // loading indicator view
     
     @IBOutlet weak var movieTable: UITableView!
     
@@ -25,17 +30,24 @@ class MovieListViewController: UIViewController, UITableViewDelegate, UITableVie
         
         self.isMoreDataLoading = true
         // preload movie data
+        showUILoadingBlocker()
+        
         MovieApiService.service.loadMovies(page: currentPage, byMovieEnum: movieEnum!){
             (inputMovies: [Movie], possibleTotalPages:Int) in
             self.isMoreDataLoading = false
             self.totalPages = possibleTotalPages
             self.movies.append(contentsOf: inputMovies)
             self.movieTable.reloadData()
+            self.stopAnimating()
         }
         movieTable.dataSource = self
         movieTable.delegate = self
         movieTable.rowHeight = 200;
         // Do any additional setup after loading the view.
+        
+        // add footer to table view for infinite scroll
+        self.loadingView = NVActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 50, height: 50), type: NVActivityIndicatorType.ballBeat, color: UIColor.black)
+        self.movieTable.tableFooterView = loadingView
     }
 
     override func didReceiveMemoryWarning() {
@@ -85,13 +97,17 @@ class MovieListViewController: UIViewController, UITableViewDelegate, UITableVie
             // When the user has scrolled past the threshold, start requesting
             if(scrollView.contentOffset.y > scrollOffsetThreshold && movieTable.isDragging) {
                 isMoreDataLoading = true
-                MovieApiService.service.loadMovies(page: currentPage, byMovieEnum: movieEnum!){
+                
+                // indicate infinite scroll is fetching more data
+                self.loadingView?.startAnimating()
+                MovieApiService.service.loadMovies(page: currentPage+1, byMovieEnum: movieEnum!){
                     (inputMovies: [Movie], possibleTotalPages:Int) in
                     self.isMoreDataLoading = false
                     self.currentPage += 1
                     self.movies.append(contentsOf: inputMovies)
                     self.totalPages = possibleTotalPages
                     self.movieTable.reloadData()
+                    self.loadingView?.stopAnimating()
                 }
             }
         }
@@ -109,6 +125,10 @@ class MovieListViewController: UIViewController, UITableViewDelegate, UITableVie
                 vc.movie = cell.movie
             }
         }
+    }
+    
+    private func showUILoadingBlocker(){
+        self.startAnimating(CGSize(width: 100, height: 100), message: "Loading...", type: NVActivityIndicatorType.ballGridPulse, color: UIColor.white, minimumDisplayTime: 500)
     }
     
 

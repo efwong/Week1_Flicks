@@ -47,6 +47,7 @@
 		4AC93E5CDDEE1331ACCFCC01 /* Pods_Week1_FlicksUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Week1_FlicksUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		59B75D631CFBA3F8FDFC2342 /* Pods_Week1_FlicksTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Week1_FlicksTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E14A9391DB49B3300039F60 /* MovieDetailsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieDetailsView.swift; sourceTree = "<group>"; };
+		5E14A93B1DB4D3A800039F60 /* AASquaresLoading.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AASquaresLoading.framework; path = "../../../Users/edwinwong/Library/Developer/Xcode/DerivedData/Week1_Flicks-gsqqbrofkyfnutemezuyagdebheq/Build/Products/Debug-iphonesimulator/AASquaresLoading/AASquaresLoading.framework"; sourceTree = "<group>"; };
 		5E1E39E51DB1E90300DF50DD /* MovieItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieItemTableViewCell.swift; sourceTree = "<group>"; };
 		5E81CA881DB18E8C00CD252C /* Week1_Flicks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Week1_Flicks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E81CA8B1DB18E8C00CD252C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -195,6 +196,7 @@
 		601C961F3E7129BF3EA34B30 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5E14A93B1DB4D3A800039F60 /* AASquaresLoading.framework */,
 				90D11C5946E348F94BBE8370 /* Pods_Week1_Flicks.framework */,
 				59B75D631CFBA3F8FDFC2342 /* Pods_Week1_FlicksTests.framework */,
 				4AC93E5CDDEE1331ACCFCC01 /* Pods_Week1_FlicksUITests.framework */,
