@@ -13,7 +13,6 @@ class MovieApiService{
     static let service = MovieApiService()
 
     // MARK: public properties
-    var movies: [Movie] = []
     
     // MARK: private properties
     private let apiKey:String = "0a92f5a1bb8ee32a1c4b2e001c3ead8a"
@@ -43,15 +42,12 @@ class MovieApiService{
     }
     
     private init(){
-        self.movies = []
     }
     
     
     // Load list of moives by either NowPlaying or TopRated
-    func loadMovies(page:Int = 1, byMovieEnum: MovieEnum, shouldResetMovieList: Bool = false, completion: @escaping () -> Void){
-        if shouldResetMovieList {
-            self.movies = []
-        }
+    func loadMovies(page:Int = 1, byMovieEnum: MovieEnum, completion: @escaping ([Movie], Int) -> Void){
+        
         // Get Url by considering movie type
         let urlString:String = (byMovieEnum == MovieEnum.nowPlaying) ? getNowPlayingUrl(page: page) : getTopRatedUrl(page: page)
         
@@ -63,15 +59,20 @@ class MovieApiService{
         let task: URLSessionDataTask = session.dataTask(with: request){
             (dataOrNil, response, error) in
             if let data = dataOrNil{
+                var movies:[Movie] = []
                 let jsonData = JSON(data: data)
                 let results = jsonData["results"]
                 for (_, subJSON):(String,JSON) in results{
                     if let parsedMovie = self.parseMovieJSON(subJSON){
-                        self.movies.append(parsedMovie)
+                        movies.append(parsedMovie)
                     }
                     
                 }
-                completion()
+                if let totalPages = jsonData["total_pages"].int{
+                    completion(movies, totalPages)
+                }else{
+                    completion(movies, 0)
+                }
             }
             
         }
