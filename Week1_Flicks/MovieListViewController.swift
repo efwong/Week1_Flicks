@@ -75,8 +75,9 @@ class MovieListViewController: UIViewController, UITableViewDelegate, UITableVie
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         if segue.identifier == "ToMovieDetailSegue" {
-            if let vc = segue.destination as? MovieDetailViewController{
-                
+            if let vc = segue.destination as? MovieDetailViewController,
+                let cell = sender as? MovieItemTableViewCell{
+                vc.movie = cell.movie
             }
         }
     }

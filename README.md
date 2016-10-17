@@ -40,6 +40,8 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 Describe any challenges encountered while building the app.
 
+Figuring out how to implement a NowPlaying and TopRated tab bar section took a considerable amount of time. I decided to reuse the main storyboard because there is very little difference between tabs.  In the app delegate, I fetched two instances of the navigation controller from the storyboard, then I created a tab bar controller and attached both nav controllers to it. This allows me to reuse and avoid recoding the main and detail movie controllers.
+
 ## License
 
     Copyright [2016] [Edwin Wong]
