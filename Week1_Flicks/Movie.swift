@@ -60,7 +60,7 @@ class Movie{
         }
     }
     
-    init(id:Int, title: String, overview:String, posterPath: URL?, date: Date, voteAverage: Double, runtime: Int? = nil, genres:[String] = []){
+    init(id:Int, title: String, overview:String, posterPath: URL?, date: Date?, voteAverage: Double, runtime: Int? = nil, genres:[String] = []){
         self.id = id
         self.title = title
         self.overview = overview

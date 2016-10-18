@@ -48,6 +48,8 @@ class MovieDetailViewController: BaseMovieViewController, UIScrollViewDelegate {
         if self.movie != nil {
             if let movieItemImagePath = self.movie?.posterFullPath{
                 self.backgroundImage.setImageWith(movieItemImagePath)
+            }else{
+                self.backgroundImage.image = UIImage(named: "default_image")
             }
         }
         // load movie with more details

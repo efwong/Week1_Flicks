@@ -37,8 +37,12 @@ class MovieApiService{
     }
     
     // get full image path when given a relative path
-    private func getFullImagePath(_ relativePath: String) -> String{
-        return "https://image.tmdb.org/t/p/w500/\(relativePath)"
+    private func getFullImagePath(_ relativePath: String?) -> String?{
+        if relativePath != nil && !(relativePath!.isEmpty){
+            return "https://image.tmdb.org/t/p/w500/\(relativePath!)"
+        }else{
+            return nil
+        }
     }
     
     // set default UrlSessionConfiguration
@@ -56,8 +60,8 @@ class MovieApiService{
     
     
     // Load list of moives by either NowPlaying or TopRated
-    // completion: movie Array, total pages, success
-    func loadMovies(page:Int = 1, byMovieEnum: MovieEnum, completion: @escaping ([Movie]?, Int, Bool) -> Void){
+    // completion: movie Array, current page #, total pages, success
+    func loadMovies(page:Int = 1, byMovieEnum: MovieEnum, completion: @escaping ([Movie]?, Int, Int,Bool) -> Void){
         
         // Get Url by considering movie type
         let urlString:String = (byMovieEnum == MovieEnum.nowPlaying) ? getNowPlayingUrl(page: page) : getTopRatedUrl(page: page)
@@ -71,7 +75,7 @@ class MovieApiService{
             (dataOrNil, response, error) in
             if (error != nil){
                 self.hasNetworkError = true
-                completion(nil, 0, false) // not successful
+                completion(nil, 0, 0, false) // not successful
             }
             else if let data = dataOrNil{
                 var movies:[Movie] = []
@@ -83,10 +87,12 @@ class MovieApiService{
                     }
                     
                 }
-                if let totalPages = jsonData["total_pages"].int{
-                    completion(movies, totalPages, true)
+                
+                if let totalPages = jsonData["total_pages"].int,
+                    let currentPage = jsonData["page"].int{
+                    completion(movies, currentPage, totalPages, true)
                 }else{
-                    completion(movies, 0, true)
+                    completion(movies, 0, 0, true)
                 }
                 
                 self.hasNetworkError = false
@@ -130,19 +136,29 @@ class MovieApiService{
     private func parseMovieJSON(_ subJSON:JSON) -> Movie?{
         if let movieId = subJSON["id"].int,
             let movieTitle = subJSON["title"].string,
-            let overview = subJSON["overview"].string,
-            let releaseDateString = subJSON["release_date"].string,
-            let voteAverage = subJSON["vote_average"].double,
-            let posterPath = subJSON["poster_path"].string{
+            let overview = subJSON["overview"].string{
             
             // check extra details
             var runTime:Int? = nil
             var genreList:[String] = []
+            var posterPath:String? = nil
+            var voteAverage:Double = 0.0
+            var movieReleaseDate:Date? = nil
+            
+            // get vote
+            if let voteAverageDouble = subJSON["vote_average"].double{
+                voteAverage = voteAverageDouble
+            }
             
             // parse runtime if exists
             if subJSON["runtime"].exists(){
                 runTime = subJSON["runtime"].int
             }
+            // get poster path
+            if let posterPathString = subJSON["poster_path"].string{
+                posterPath = posterPathString
+            }
+            let fullPosterPath = self.getFullImagePath(posterPath)
             
             // parse genres if exists
             if subJSON["genres"].exists(){
@@ -156,15 +172,20 @@ class MovieApiService{
                 
             }
             
+            // get date
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd"
-            // save list of movies
-            if let movieReleaseDate = dateFormatter.date(from: releaseDateString){
-                
-                let curMovie = Movie(id: movieId, title: movieTitle, overview: overview, posterPath: URL(string: self.getFullImagePath(posterPath)), date: movieReleaseDate, voteAverage: voteAverage, runtime: runTime, genres: genreList)
-                
-                return curMovie
+            if let releaseDateString = subJSON["release_date"].string{
+                if let movieReleaseDateTemp = dateFormatter.date(from: releaseDateString){
+                    movieReleaseDate = movieReleaseDateTemp
+                }
             }
+            
+            let imageUrl: URL? = (fullPosterPath != nil) ? URL(string: fullPosterPath!) : nil
+            let curMovie = Movie(id: movieId, title: movieTitle, overview: overview, posterPath: imageUrl, date: movieReleaseDate, voteAverage: voteAverage, runtime: runTime, genres: genreList)
+            
+            return curMovie
+            
         }
         return nil
     }

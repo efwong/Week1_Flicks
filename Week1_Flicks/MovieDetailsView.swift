@@ -97,7 +97,9 @@ class MovieDetailsView: UIView {
         // update frame
         let innerScrollYPos:CGFloat = yPos// - CGFloat(height)
         self.frame = CGRect(x: 0.0, y: innerScrollYPos, width: parentView.frame.width, height: height)
-        self.backgroundColor = UIColor.white
+        self.backgroundColor = UIColor.white.withAlphaComponent(0.9)
+        self.layer.cornerRadius = 8.0
+        self.clipsToBounds = true
         
         self.addSubview(self.titleLabel)
         self.addSubview(self.overviewLabel)

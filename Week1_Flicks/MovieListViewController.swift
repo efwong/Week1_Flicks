@@ -37,26 +37,25 @@ class MovieListViewController: BaseMovieViewController, UITableViewDelegate, UIT
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // set title
+        if self.movieEnum != nil{
+            if self.movieEnum == MovieEnum.nowPlaying{
+                self.title = "Now Playing"
+            }else{
+                self.title = "Top Rated"
+            }
+        }
         
         self.isMoreDataLoading = true
-        // preload movie data
+        // show loading UI blocker
         super.showUILoadingBlocker()
         
-        MovieApiService.service.loadMovies(page: currentPage, byMovieEnum: movieEnum!){
-            (inputMovies: [Movie]?, possibleTotalPages:Int, success:Bool) in
-            if success{
-                super.toggleNetworkError(self.networkErrorLabel, turnOn: false)
-                self.isMoreDataLoading = false
-                self.totalPages = possibleTotalPages
-                if inputMovies != nil{
-                    self.movies.append(contentsOf: inputMovies!)
-                }
-                self.movieTable.reloadData()
-            }else{
-                super.toggleNetworkError(self.networkErrorLabel,turnOn: true)
-            }
-            self.stopAnimating()
+        // preload movie data
+        self.makeMovieApiMovieListRequest(page: self.currentPage){
+            () in
+            self.stopAnimating() // stop animation of UILoadingBlocker
         }
+
         movieTable.dataSource = self
         movieTable.delegate = self
         movieTable.rowHeight = 200;
@@ -65,6 +64,15 @@ class MovieListViewController: BaseMovieViewController, UITableViewDelegate, UIT
         // add footer to table view for infinite scroll
         self.loadingView = NVActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 50, height: 50), type: NVActivityIndicatorType.ballBeat, color: UIColor.black)
         self.movieTable.tableFooterView = loadingView
+        
+        // add refresh control
+        
+        // Initialize UIRefreshControl
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refreshControlAction), for: UIControlEvents.valueChanged)
+        
+        self.movieTable.insertSubview(refreshControl, at: 0)
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -88,6 +96,8 @@ class MovieListViewController: BaseMovieViewController, UITableViewDelegate, UIT
             cell.movieOverviewLabel.numberOfLines = 0
             if let movieItemImagePath = movieItem.posterFullPath{
                 cell.moviePoster.setImageWith(movieItemImagePath)
+            }else{
+                cell.moviePoster.image = UIImage(named: "default_image")
             }
         }
         
@@ -117,23 +127,27 @@ class MovieListViewController: BaseMovieViewController, UITableViewDelegate, UIT
                 
                 // indicate infinite scroll is fetching more data
                 self.loadingView?.startAnimating()
-                MovieApiService.service.loadMovies(page: currentPage+1, byMovieEnum: movieEnum!){
-                    (inputMovies: [Movie]?, possibleTotalPages:Int, success: Bool) in
-                    
-                    if success{
-                        super.toggleNetworkError(self.networkErrorLabel, turnOn: false)
-                        self.isMoreDataLoading = false
-                        self.currentPage += 1
-                        self.totalPages = possibleTotalPages
-                        if inputMovies != nil{
-                            self.movies.append(contentsOf: inputMovies!)
-                        }
-                        self.movieTable.reloadData()
-                    }else{
-                        super.toggleNetworkError(self.networkErrorLabel, turnOn: true)
-                    }
-                    self.loadingView?.stopAnimating()
+                self.makeMovieApiMovieListRequest(page: self.currentPage+1){
+                    () in
+                    self.loadingView?.stopAnimating() // stop infinite scroll loading view animation
                 }
+//                MovieApiService.service.loadMovies(page: currentPage+1, byMovieEnum: movieEnum!){
+//                    (inputMovies: [Movie]?, possibleCurrentPage: Int, possibleTotalPages:Int, success: Bool) in
+//                    
+//                    if success{
+//                        super.toggleNetworkError(self.networkErrorLabel, turnOn: false)
+//                        self.isMoreDataLoading = false
+//                        self.currentPage = possibleCurrentPage
+//                        self.totalPages = possibleTotalPages
+//                        if inputMovies != nil{
+//                            self.movies.append(contentsOf: inputMovies!)
+//                        }
+//                        self.movieTable.reloadData()
+//                    }else{
+//                        super.toggleNetworkError(self.networkErrorLabel, turnOn: true)
+//                    }
+//                    self.loadingView?.stopAnimating()
+//                }
             }
         }
     }
@@ -149,6 +163,37 @@ class MovieListViewController: BaseMovieViewController, UITableViewDelegate, UIT
                 let cell = sender as? MovieItemTableViewCell{
                 vc.movie = cell.movie
             }
+        }
+    }
+    
+    // Fetch all list of movies at given page number and movie type (Now Playing vs Top Rated)
+    private func makeMovieApiMovieListRequest(page: Int, completion: @escaping ()->Void){
+        MovieApiService.service.loadMovies(page: page, byMovieEnum: self.movieEnum!){
+            (inputMovies: [Movie]?, possibleCurrentPage: Int, possibleTotalPages:Int, success: Bool) in
+            
+            if success{
+                super.toggleNetworkError(self.networkErrorLabel, turnOn: false)
+                self.isMoreDataLoading = false
+                self.currentPage = possibleCurrentPage
+                self.totalPages = possibleTotalPages
+                if inputMovies != nil{
+                    self.movies.append(contentsOf: inputMovies!)
+                }
+                self.movieTable.reloadData()
+            }else{
+                super.toggleNetworkError(self.networkErrorLabel, turnOn: true)
+            }
+            completion()
+        }
+    }
+    
+    // execute on refresh control pull down
+    func refreshControlAction(refreshControl: UIRefreshControl){
+        self.movies.removeAll()
+        self.currentPage = 1
+        self.makeMovieApiMovieListRequest(page: self.currentPage){
+            () in
+            refreshControl.endRefreshing()
         }
     }
     
