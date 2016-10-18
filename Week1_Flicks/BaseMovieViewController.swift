@@ -39,12 +39,5 @@ class BaseMovieViewController: UIViewController, NVActivityIndicatorViewable {
         }
     }
     
-//    func createErrorLabel() -> UILabel{
-//        var errorLabelTemp = UILabel(frame: CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: 50.0))
-//        errorLabelTemp.textColor = UIColor.white
-//        errorLabelTemp.backgroundColor = UIColor(colorLiteralRed: 83.0, green: 83.0, blue: 83.0, alpha: 0.77)
-//        errorLabelTemp.text = "Network Error"
-//        return errorLabelTemp
-//    }
     
 }

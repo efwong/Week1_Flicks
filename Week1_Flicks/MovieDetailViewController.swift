@@ -46,8 +46,9 @@ class MovieDetailViewController: BaseMovieViewController, UIScrollViewDelegate {
         
         // preload movie background
         if self.movie != nil {
+            self.title = movie?.title
             if let movieItemImagePath = self.movie?.posterFullPath{
-                self.backgroundImage.setImageWith(movieItemImagePath)
+                Helper.loadImageHelper(imageView: self.backgroundImage, imageUrl: movieItemImagePath)
             }else{
                 self.backgroundImage.image = UIImage(named: "default_image")
             }

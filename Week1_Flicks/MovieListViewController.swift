@@ -83,7 +83,7 @@ class MovieListViewController: BaseMovieViewController, UITableViewDelegate, UIT
     // contruct cells from MovieAPI data
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "com.MovieCell", for: indexPath) as! MovieItemTableViewCell
-            
+        
         let movieList = self.movies
         
         // check if the particular movieList Item indexed at row exists
@@ -95,7 +95,7 @@ class MovieListViewController: BaseMovieViewController, UITableViewDelegate, UIT
             cell.movieOverviewLabel.text = movieItem.overview
             cell.movieOverviewLabel.numberOfLines = 0
             if let movieItemImagePath = movieItem.posterFullPath{
-                cell.moviePoster.setImageWith(movieItemImagePath)
+                Helper.loadImageHelper(imageView: cell.moviePoster, imageUrl: movieItemImagePath)
             }else{
                 cell.moviePoster.image = UIImage(named: "default_image")
             }
