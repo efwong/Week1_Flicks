@@ -2,21 +2,21 @@
 
 **Flicks** is a movies app using the [The Movie Database API](http://docs.themoviedb.apiary.io/#).
 
-Time spent: **9** hours spent in total
+Time spent: **18** hours spent in total
 
 ## User Stories
 
 The following **required** functionality is completed:
 
-- [ ] User can view a list of movies currently playing in theaters. Poster images load asynchronously.
-- [ ] User can view movie details by tapping on a cell.
-- [ ] User sees loading state while waiting for the API.
-- [ ] User sees an error message when there is a network error.
-- [ ] User can pull to refresh the movie list.
+- [*] User can view a list of movies currently playing in theaters. Poster images load asynchronously.
+- [*] User can view movie details by tapping on a cell.
+- [*] User sees loading state while waiting for the API.
+- [*] User sees an error message when there is a network error.
+- [*] User can pull to refresh the movie list.
 
 The following **optional** features are implemented:
 
-- [+] Add a tab bar for **Now Playing** and **Top Rated** movies.
+- [*] Add a tab bar for **Now Playing** and **Top Rated** movies.
 - [ ] Implement segmented control to switch between list view and grid view.
 - [ ] Add a search bar.
 - [ ] All images fade in.
@@ -32,15 +32,33 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='http://i.imgur.com/bZa3ejZ.gifv' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
-Describe any challenges encountered while building the app.
+### Describe any challenges encountered while building the app.
 
 Figuring out how to implement a NowPlaying and TopRated tab bar section took a considerable amount of time. I decided to reuse the main storyboard because there is very little difference between tabs.  In the app delegate, I fetched two instances of the navigation controller from the storyboard, then I created a tab bar controller and attached both nav controllers to it. This allows me to reuse and avoid recoding the main and detail movie controllers.
+
+Creating the scrollable view in the Details View was also fairly difficult.  At first I used an autolayout approach, but because of the unknown height of the overview label, the view would end up incorrectly positioned. Instead, I now use a programmatic approach. I created a new class for the UIView that would generate the labels and keep track of the height of the view.
+
+
+### Other Issues
+The network error popup was implemented through the storyboard, one for each view.  In the future, I will refactor and perhaps use a separate service to programattically show the UI to avoid duplicate code.  Currently the network error view is only displayed when an api call is made; it does not check network availability (wifi/data).  Because of caching, even without a network, the app will be able to load data and the network error view will not popup.
+
+I have not spent much time on designing and improving the general UI.  Hopefully, I will get back to it, refactor, and improve the UI.
+
+
+
+## Acknowledgement
+
+    Thanks to the following third party libraries and API used in this project:
+    * [AFNetworking](https://github.com/AFNetworking/AFNetworking)
+    * [NVActivityIndicatorView](https://github.com/ninjaprox/NVActivityIndicatorView)
+    * [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON)
+    * [MovieDB](https://www.themoviedb.org/?language=en)
 
 ## License
 
