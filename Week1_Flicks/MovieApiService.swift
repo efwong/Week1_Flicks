@@ -41,12 +41,23 @@ class MovieApiService{
         return "https://image.tmdb.org/t/p/w500/\(relativePath)"
     }
     
+    // set default UrlSessionConfiguration
+    var urlSessionConfig: URLSessionConfiguration
+    
+    // keep track if there previously was a network error
+    var hasNetworkError: Bool = false
+    
     private init(){
+        // set urlsession to timeout after 5 seconds
+        urlSessionConfig = URLSessionConfiguration.default
+        urlSessionConfig.timeoutIntervalForRequest = 5
+        urlSessionConfig.timeoutIntervalForResource = 5
     }
     
     
     // Load list of moives by either NowPlaying or TopRated
-    func loadMovies(page:Int = 1, byMovieEnum: MovieEnum, completion: @escaping ([Movie], Int) -> Void){
+    // completion: movie Array, total pages, success
+    func loadMovies(page:Int = 1, byMovieEnum: MovieEnum, completion: @escaping ([Movie]?, Int, Bool) -> Void){
         
         // Get Url by considering movie type
         let urlString:String = (byMovieEnum == MovieEnum.nowPlaying) ? getNowPlayingUrl(page: page) : getTopRatedUrl(page: page)
@@ -54,11 +65,15 @@ class MovieApiService{
         let url:URL? = URL(string: urlString)
         
         let request = URLRequest(url: url!)
-        let session = URLSession(configuration: URLSessionConfiguration.default, delegate: nil, delegateQueue: OperationQueue.main)
+        let session = URLSession(configuration: self.urlSessionConfig, delegate: nil, delegateQueue: OperationQueue.main)
         
         let task: URLSessionDataTask = session.dataTask(with: request){
             (dataOrNil, response, error) in
-            if let data = dataOrNil{
+            if (error != nil){
+                self.hasNetworkError = true
+                completion(nil, 0, false) // not successful
+            }
+            else if let data = dataOrNil{
                 var movies:[Movie] = []
                 let jsonData = JSON(data: data)
                 let results = jsonData["results"]
@@ -69,11 +84,14 @@ class MovieApiService{
                     
                 }
                 if let totalPages = jsonData["total_pages"].int{
-                    completion(movies, totalPages)
+                    completion(movies, totalPages, true)
                 }else{
-                    completion(movies, 0)
+                    completion(movies, 0, true)
                 }
+                
+                self.hasNetworkError = false
             }
+                
             
         }
         
@@ -83,18 +101,24 @@ class MovieApiService{
     // Load Movie Details
     // Gets additional property (runtime and genres)
     // run callback in completion to execute update with Movie Properties
-    func loadMovieDetails(movieId: Int, completion: @escaping (Movie) -> Void) -> Void{
+    func loadMovieDetails(movieId: Int, completion: @escaping (Movie?, Bool) -> Void) -> Void{
         
         let url:URL? = URL(string: getMovieDetailUrl(movieId))
         let request = URLRequest(url: url!)
-        let session = URLSession(configuration: URLSessionConfiguration.default, delegate: nil, delegateQueue: OperationQueue.main)
+        
+        let session = URLSession(configuration: self.urlSessionConfig, delegate: nil, delegateQueue: OperationQueue.main)
         let task: URLSessionDataTask = session.dataTask(with: request){
             (dataOrNil, response, error) in
-            if let data = dataOrNil{
+            if (error != nil){
+                completion(nil, false) // not successful
+                self.hasNetworkError = true
+            }
+            else if let data = dataOrNil{
                 let jsonData = JSON(data: data)
                 if let movieData = self.parseMovieJSON(jsonData){
-                    completion(movieData)
+                    completion(movieData, true)
                 }
+                self.hasNetworkError = false
                 
             }
         }

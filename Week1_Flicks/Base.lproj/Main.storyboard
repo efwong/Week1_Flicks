@@ -26,7 +26,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="200"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="WhB-l4-6NC" id="sZ9-I7-0p2">
-                                            <frame key="frameInset" width="375" height="199.5"/>
+                                            <frame key="frameInset" width="375" height="199"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1lq-Ym-4ox">
@@ -67,18 +67,31 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Network Error" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gDi-W9-TK8">
+                                <color key="backgroundColor" red="0.32378472219999999" green="0.32378472219999999" blue="0.32378472219999999" alpha="0.90000000000000002" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="Eec-jK-XsV"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="20"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="WlZ-Bt-9Xg" firstAttribute="top" secondItem="ZKU-xU-CZx" secondAttribute="bottom" id="2rT-2D-2mp"/>
                             <constraint firstItem="Unb-IK-kP7" firstAttribute="top" secondItem="WlZ-Bt-9Xg" secondAttribute="bottom" id="BXp-15-tvp"/>
+                            <constraint firstItem="WlZ-Bt-9Xg" firstAttribute="top" secondItem="ZKU-xU-CZx" secondAttribute="bottom" id="EgM-vu-Ap6"/>
+                            <constraint firstItem="gDi-W9-TK8" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Ek3-HF-qCp"/>
+                            <constraint firstAttribute="trailing" secondItem="gDi-W9-TK8" secondAttribute="trailing" id="H3u-yr-Oby"/>
                             <constraint firstItem="WlZ-Bt-9Xg" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="bm2-If-Cat"/>
                             <constraint firstAttribute="trailing" secondItem="WlZ-Bt-9Xg" secondAttribute="trailing" id="dep-qI-bJ4"/>
+                            <constraint firstItem="gDi-W9-TK8" firstAttribute="top" secondItem="ZKU-xU-CZx" secondAttribute="bottom" id="qkK-0V-t7p"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="vxu-ev-oM0"/>
                     <connections>
                         <outlet property="movieTable" destination="WlZ-Bt-9Xg" id="7er-mW-its"/>
+                        <outlet property="networkErrorLabel" destination="gDi-W9-TK8" id="6ds-ku-Pad"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -99,6 +112,15 @@
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6uK-FF-mka"/>
                             <scrollView autoresizesSubviews="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nd6-O7-Ycc"/>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Network Error" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U8Z-xJ-ohn">
+                                <color key="backgroundColor" red="0.32378472219999999" green="0.32378472219999999" blue="0.32378472219999999" alpha="0.90000000000000002" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="XtY-Ky-5C3"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="20"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -106,9 +128,12 @@
                             <constraint firstItem="6uK-FF-mka" firstAttribute="leading" secondItem="Kqk-of-Alk" secondAttribute="leading" id="BNO-da-WZ3"/>
                             <constraint firstAttribute="trailing" secondItem="Nd6-O7-Ycc" secondAttribute="trailing" constant="20" id="Hr0-9E-pT2"/>
                             <constraint firstItem="x6r-5e-ZaH" firstAttribute="top" secondItem="Nd6-O7-Ycc" secondAttribute="bottom" id="Nr1-gi-t3d"/>
+                            <constraint firstItem="U8Z-xJ-ohn" firstAttribute="top" secondItem="THM-ag-6Bf" secondAttribute="bottom" id="Qzv-kh-BOm"/>
                             <constraint firstAttribute="trailing" secondItem="6uK-FF-mka" secondAttribute="trailing" id="REz-i8-1hV"/>
+                            <constraint firstItem="U8Z-xJ-ohn" firstAttribute="leading" secondItem="Kqk-of-Alk" secondAttribute="leading" id="RYq-FH-XHo"/>
                             <constraint firstItem="Nd6-O7-Ycc" firstAttribute="leading" secondItem="Kqk-of-Alk" secondAttribute="leading" constant="20" id="XXU-Of-u3c"/>
                             <constraint firstItem="x6r-5e-ZaH" firstAttribute="top" secondItem="Nd6-O7-Ycc" secondAttribute="bottom" id="YGl-Pl-MSn"/>
+                            <constraint firstAttribute="trailing" secondItem="U8Z-xJ-ohn" secondAttribute="trailing" id="eGm-2V-WYp"/>
                             <constraint firstItem="Nd6-O7-Ycc" firstAttribute="top" secondItem="THM-ag-6Bf" secondAttribute="bottom" id="f9l-ga-Cai"/>
                             <constraint firstItem="x6r-5e-ZaH" firstAttribute="top" secondItem="6uK-FF-mka" secondAttribute="bottom" id="v04-Cd-Fu9"/>
                         </constraints>
@@ -116,6 +141,7 @@
                     <navigationItem key="navigationItem" id="kgD-Fu-6uv"/>
                     <connections>
                         <outlet property="backgroundImage" destination="6uK-FF-mka" id="KYQ-Dh-nIL"/>
+                        <outlet property="networkErrorLabel" destination="U8Z-xJ-ohn" id="Utc-ur-cmH"/>
                         <outlet property="scrollView" destination="Nd6-O7-Ycc" id="rfR-HY-uXq"/>
                     </connections>
                 </viewController>

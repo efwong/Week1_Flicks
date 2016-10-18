@@ -11,7 +11,7 @@ import AFNetworking
 
 import NVActivityIndicatorView
 
-class MovieListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, NVActivityIndicatorViewable {
+class MovieListViewController: BaseMovieViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
 
     var movieEnum: MovieEnum?
     var movies: [Movie] = []
@@ -22,7 +22,17 @@ class MovieListViewController: UIViewController, UITableViewDelegate, UITableVie
     var isMoreDataLoading: Bool = false // lock access to api service to one call at a time
     var loadingView: NVActivityIndicatorView? = nil // loading indicator view
     
+    @IBOutlet weak var networkErrorLabel: UILabel!
     @IBOutlet weak var movieTable: UITableView!
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if MovieApiService.service.hasNetworkError{
+            super.toggleNetworkError(self.networkErrorLabel, turnOn: true)
+        }else{
+            super.toggleNetworkError(self.networkErrorLabel, turnOn: false)
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,14 +40,21 @@ class MovieListViewController: UIViewController, UITableViewDelegate, UITableVie
         
         self.isMoreDataLoading = true
         // preload movie data
-        showUILoadingBlocker()
+        super.showUILoadingBlocker()
         
         MovieApiService.service.loadMovies(page: currentPage, byMovieEnum: movieEnum!){
-            (inputMovies: [Movie], possibleTotalPages:Int) in
-            self.isMoreDataLoading = false
-            self.totalPages = possibleTotalPages
-            self.movies.append(contentsOf: inputMovies)
-            self.movieTable.reloadData()
+            (inputMovies: [Movie]?, possibleTotalPages:Int, success:Bool) in
+            if success{
+                super.toggleNetworkError(self.networkErrorLabel, turnOn: false)
+                self.isMoreDataLoading = false
+                self.totalPages = possibleTotalPages
+                if inputMovies != nil{
+                    self.movies.append(contentsOf: inputMovies!)
+                }
+                self.movieTable.reloadData()
+            }else{
+                super.toggleNetworkError(self.networkErrorLabel,turnOn: true)
+            }
             self.stopAnimating()
         }
         movieTable.dataSource = self
@@ -101,12 +118,20 @@ class MovieListViewController: UIViewController, UITableViewDelegate, UITableVie
                 // indicate infinite scroll is fetching more data
                 self.loadingView?.startAnimating()
                 MovieApiService.service.loadMovies(page: currentPage+1, byMovieEnum: movieEnum!){
-                    (inputMovies: [Movie], possibleTotalPages:Int) in
-                    self.isMoreDataLoading = false
-                    self.currentPage += 1
-                    self.movies.append(contentsOf: inputMovies)
-                    self.totalPages = possibleTotalPages
-                    self.movieTable.reloadData()
+                    (inputMovies: [Movie]?, possibleTotalPages:Int, success: Bool) in
+                    
+                    if success{
+                        super.toggleNetworkError(self.networkErrorLabel, turnOn: false)
+                        self.isMoreDataLoading = false
+                        self.currentPage += 1
+                        self.totalPages = possibleTotalPages
+                        if inputMovies != nil{
+                            self.movies.append(contentsOf: inputMovies!)
+                        }
+                        self.movieTable.reloadData()
+                    }else{
+                        super.toggleNetworkError(self.networkErrorLabel, turnOn: true)
+                    }
                     self.loadingView?.stopAnimating()
                 }
             }
@@ -127,9 +152,6 @@ class MovieListViewController: UIViewController, UITableViewDelegate, UITableVie
         }
     }
     
-    private func showUILoadingBlocker(){
-        self.startAnimating(CGSize(width: 100, height: 100), message: "Loading...", type: NVActivityIndicatorType.ballGridPulse, color: UIColor.white, minimumDisplayTime: 500)
-    }
     
 
 }
